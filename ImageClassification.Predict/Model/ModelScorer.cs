@@ -4,6 +4,7 @@ using ImageClassification.ImageData;
 using System.IO;
 using Microsoft.ML;
 using static ImageClassification.Model.ConsoleHelpers;
+using System.Collections.Generic;
 
 namespace ImageClassification.Model
 {
@@ -45,6 +46,27 @@ namespace ImageClassification.Model
                 .Select(pr => (pr.td.ImagePath, pr.pred.PredictedLabelValue, pr.pred.Score))
                 .ToList()
                 .ForEach(pr => ConsoleWriteImagePrediction(pr.ImagePath, pr.PredictedLabelValue, pr.Score.Max()));
+        }
+
+        public List<ImageWebData> ClassifyImages4Web()
+        {
+            // Load the model
+            ITransformer loadedModel = mlContext.Model.Load(modelLocation, out var modelInputSchema);
+
+            // Make prediction function (input = ImageNetData, output = ImageNetPrediction)
+            var predictor = mlContext.Model.CreatePredictionEngine<ImageNetData, ImageNetPrediction>(loadedModel);
+            // Read csv file into List<ImageNetData>
+            var imageListToPredict = ImageNetData.ReadFromCsv(dataLocation, imagesFolder).ToList();
+
+            return imageListToPredict
+                .Select(td => new { td, pred = predictor.Predict(td) })
+                .Select(pr => new ImageWebData
+                {
+                    ImagePath = Path.GetFileName(pr.td.ImagePath),
+                    Label = pr.pred.PredictedLabelValue,
+                    Probability = pr.pred.Score.Max()
+                })
+                .ToList();
         }
     }
 }
