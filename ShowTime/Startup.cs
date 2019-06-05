@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
+using ShowTime.Hubs;
 using System.IO;
 
 namespace ShowTime
@@ -22,6 +23,8 @@ namespace ShowTime
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.AddSignalR();
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -41,6 +44,11 @@ namespace ShowTime
             {
                 app.UseExceptionHandler("/Error");
             }
+
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<ConsoleHub>("/console");
+            });
 
             app.UseStaticFiles(new StaticFileOptions
             {

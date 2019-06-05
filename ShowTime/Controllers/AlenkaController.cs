@@ -5,6 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using ImageClassification.Model;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
+using ShowTime.Hubs;
 
 namespace ShowTime.Controllers
 {
@@ -12,6 +14,12 @@ namespace ShowTime.Controllers
     public class AlenkaController : Controller
     {
         private string assetsPath => GetAbsolutePath(@"../../../assets");
+        private readonly IHubContext<ConsoleHub> _hub;
+
+        public AlenkaController(IHubContext<ConsoleHub> hub)
+        {
+            _hub = hub;
+        }
 
         [HttpGet("[action]")]
         public IActionResult Train()
@@ -24,7 +32,9 @@ namespace ShowTime.Controllers
             try
             {
                 var modelBuilder = new ModelBuilder(tagsTsv, imagesFolder, inceptionPb, imageClassifierZip);
-                var result = modelBuilder.BuildAndReturn();
+                Func<string, Task> logTask = message => 
+                    _hub.Clients.All.SendAsync("get_log", message);
+                var result = modelBuilder.BuildAndReturn(logTask);
                 return Ok(result);
             }
             catch (Exception ex)

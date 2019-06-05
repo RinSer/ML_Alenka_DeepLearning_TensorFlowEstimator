@@ -3,9 +3,10 @@ import thunk from 'redux-thunk';
 import { routerReducer, routerMiddleware } from 'react-router-redux';
 import * as Counter from './Counter';
 import * as WeatherForecasts from './WeatherForecasts';
+import * as SignalR from '@aspnet/signalr';
 
 export default function configureStore(history, initialState) {
-  const reducers = {
+    const reducers = {
     counter: Counter.reducer,
     weatherForecasts: WeatherForecasts.reducer
   };
@@ -25,7 +26,17 @@ export default function configureStore(history, initialState) {
   const rootReducer = combineReducers({
     ...reducers,
     routing: routerReducer
-  });
+    });
+
+    const connection = new SignalR.HubConnectionBuilder()
+        .withUrl('http://localhost:63794/console')
+        .build();
+
+    connection.on('get_log', message => {
+        console.log(message);
+    });
+
+    Promise.resolve(connection.start());
 
   return createStore(
     rootReducer,

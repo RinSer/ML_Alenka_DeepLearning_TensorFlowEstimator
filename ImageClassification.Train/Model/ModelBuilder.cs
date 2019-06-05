@@ -4,7 +4,7 @@ using Microsoft.ML;
 using ImageClassification.ImageData;
 using static ImageClassification.Model.ConsoleHelpers;
 using System.Collections.Generic;
-
+using System.Threading.Tasks;
 
 namespace ImageClassification.Model
 {
@@ -90,11 +90,17 @@ namespace ImageClassification.Model
             Console.WriteLine($"Model saved: {outputModelLocation}");
         }
 
-        public List<ImageWebData> BuildAndReturn()
+        public List<ImageWebData> BuildAndReturn(Func<string, Task> consoleWrite)
         {
             List<ImageWebData> trainingList = new List<ImageWebData>();
 
             var featurizerModelLocation = inputModelLocation;
+
+            consoleWrite("Читаю модель");
+            consoleWrite($"Model location: {featurizerModelLocation}");
+            consoleWrite($"Images folder: {imagesFolder}");
+            consoleWrite($"Training file: {dataLocation}");
+            consoleWrite($"Default parameters: image size=({ImageNetSettings.imageWidth},{ImageNetSettings.imageHeight}), image mean: {ImageNetSettings.mean}");
 
             var data = mlContext.Data.LoadFromTextFile<ImageNetData>(path: dataLocation, hasHeader: false);
 
