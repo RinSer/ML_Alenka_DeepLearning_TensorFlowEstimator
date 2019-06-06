@@ -1,6 +1,9 @@
 ﻿import BasicLayout from './BasicLayout';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { actionCreators } from '../store/ConsoleLog';
 
-export default class Predict extends BasicLayout {
+class Predict extends BasicLayout {
 
     async componentDidMount() {
         try {
@@ -8,8 +11,13 @@ export default class Predict extends BasicLayout {
             let data = await response.json();
             this.setState({ data, folder: 'outputs' });
         } catch (e) {
-            console.error(e.message);
+            if (e) console.error(e.message);
         }
     }
 
 }
+
+export default connect(
+    state => state.consoleLog,
+    dispatch => bindActionCreators(actionCreators, dispatch)
+)(Predict);

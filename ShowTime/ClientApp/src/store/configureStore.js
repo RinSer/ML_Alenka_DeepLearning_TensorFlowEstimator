@@ -4,43 +4,47 @@ import { routerReducer, routerMiddleware } from 'react-router-redux';
 import * as Counter from './Counter';
 import * as WeatherForecasts from './WeatherForecasts';
 import * as SignalR from '@aspnet/signalr';
+import * as CL from './ConsoleLog';
 
 export default function configureStore(history, initialState) {
-    const reducers = {
-    counter: Counter.reducer,
-    weatherForecasts: WeatherForecasts.reducer
-  };
+      const reducers = {
+        counter: Counter.reducer,
+        weatherForecasts: WeatherForecasts.reducer,
+        consoleLog: CL.reducer
+      };
 
-  const middleware = [
-    thunk,
-    routerMiddleware(history)
-  ];
+      const middleware = [
+        thunk,
+        routerMiddleware(history)
+      ];
 
-  // In development, use the browser's Redux dev tools extension if installed
-  const enhancers = [];
-  const isDevelopment = process.env.NODE_ENV === 'development';
-  if (isDevelopment && typeof window !== 'undefined' && window.devToolsExtension) {
-    enhancers.push(window.devToolsExtension());
-  }
+      // In development, use the browser's Redux dev tools extension if installed
+      const enhancers = [];
+      const isDevelopment = process.env.NODE_ENV === 'development';
+      if (isDevelopment && typeof window !== 'undefined' && window.devToolsExtension) {
+        enhancers.push(window.devToolsExtension());
+      }
 
-  const rootReducer = combineReducers({
-    ...reducers,
-    routing: routerReducer
-    });
+      const rootReducer = combineReducers({
+        ...reducers,
+        routing: routerReducer
+        });
 
-    const connection = new SignalR.HubConnectionBuilder()
-        .withUrl('http://localhost:63794/console')
-        .build();
+        const connection = new SignalR.HubConnectionBuilder()
+            .withUrl(window.location.protocol + '//' + window.location.host + '/console')
+            .build();
 
-    connection.on('get_log', message => {
-        console.log(message);
-    });
+        let store = createStore(
+            rootReducer,
+            initialState,
+            compose(applyMiddleware(...middleware), ...enhancers)
+        );
 
-    Promise.resolve(connection.start());
+        connection.on('get_log', logging => {
+            store.dispatch(({ type: CL.log2ConsoleType, logging }));
+        });
 
-  return createStore(
-    rootReducer,
-    initialState,
-    compose(applyMiddleware(...middleware), ...enhancers)
-  );
+        Promise.resolve(connection.start());
+
+        return store;
 }

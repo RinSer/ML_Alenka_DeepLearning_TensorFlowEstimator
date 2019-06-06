@@ -15,10 +15,12 @@ namespace ShowTime.Controllers
     {
         private string assetsPath => GetAbsolutePath(@"../../../assets");
         private readonly IHubContext<ConsoleHub> _hub;
+        private readonly Func<string, Task> _logTask;
 
         public AlenkaController(IHubContext<ConsoleHub> hub)
         {
             _hub = hub;
+            _logTask = message => _hub.Clients.All.SendAsync("get_log", message);
         }
 
         [HttpGet("[action]")]
@@ -32,13 +34,12 @@ namespace ShowTime.Controllers
             try
             {
                 var modelBuilder = new ModelBuilder(tagsTsv, imagesFolder, inceptionPb, imageClassifierZip);
-                Func<string, Task> logTask = message => 
-                    _hub.Clients.All.SendAsync("get_log", message);
-                var result = modelBuilder.BuildAndReturn(logTask);
+                var result = modelBuilder.BuildAndReturn(_logTask);
                 return Ok(result);
             }
             catch (Exception ex)
             {
+                _logTask($"<p class=\"console\" style=\"color:red\">{ex.Message}</p>");
                 return BadRequest(ex);
             }
         }
@@ -58,6 +59,7 @@ namespace ShowTime.Controllers
             }
             catch(Exception ex)
             {
+                _logTask($"<p class=\"console\" style=\"color:red\">{ex.Message}</p>");
                 return BadRequest(ex);
             }
         }

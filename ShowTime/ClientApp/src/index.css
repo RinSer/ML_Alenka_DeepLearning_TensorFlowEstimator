@@ -1,3 +1,19 @@
+.console {
+    overflow: hidden;
+    white-space: nowrap;
+    animation: typing 0.5s steps(50, start);
+}
+
+@keyframes typing {
+    from {
+        width: 0
+    }
+
+    to {
+        width: 100%
+    }
+}
+
 @media (max-width: 767px) {
     /* On small screens, the nav menu spans the full width of the screen. Leave a space for it. */
     body {

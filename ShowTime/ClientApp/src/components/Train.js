@@ -1,6 +1,9 @@
 ﻿import BasicLayout from './BasicLayout';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { actionCreators } from '../store/ConsoleLog';
 
-export default class Train extends BasicLayout {
+class Train extends BasicLayout {
 
     async componentDidMount() {
         try {
@@ -8,8 +11,13 @@ export default class Train extends BasicLayout {
             let data = await response.json();
             this.setState({ data, folder: 'inputs' });
         } catch (e) {
-            console.error(e.message);
+            if (e) console.error(e.message);
         }
     }
 
 }
+
+export default connect(
+    state => state.consoleLog,
+    dispatch => bindActionCreators(actionCreators, dispatch)
+)(Train);
