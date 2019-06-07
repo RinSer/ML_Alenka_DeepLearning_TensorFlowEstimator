@@ -2,12 +2,8 @@
 
 export default class BasicLayout extends React.Component {
     _consoleStyle = {
-        marginTop: '50px'
+        marginTop: '25px'
     };
-    _logElements = [<div key="initial_message"><p className="console">Процедура обучения модели</p></div>];
-    _consoleHTML = (<div style={this._consoleStyle}>{this._logElements}</div>);
-    _lastLog = "";
-    _isUpdating = false;
 
     render() {
 
@@ -36,18 +32,10 @@ export default class BasicLayout extends React.Component {
             );
         }
 
-        return this._consoleHTML;
+        return (<div style={this._consoleStyle}>
+            {this.props.logging.map((log, idx) => <p key={log + idx} className="console">{log}</p>)}
+        </div>);
         
-    }
-
-    componentDidUpdate(prevProps) {
-        if (this.props.logging !== prevProps.logging) {
-            console.log(this.props.logging);
-            let newElement =
-                (<div key={this.props.logging} dangerouslySetInnerHTML={{ __html: this.props.logging }}></div>);
-            this._logElements.push(newElement)
-            console.log(this._logElements);
-        }
     }
 
     translitLabel(label) {

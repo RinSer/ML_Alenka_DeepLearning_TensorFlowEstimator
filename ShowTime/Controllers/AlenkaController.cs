@@ -39,7 +39,7 @@ namespace ShowTime.Controllers
             }
             catch (Exception ex)
             {
-                _logTask($"<p class=\"console\" style=\"color:red\">{ex.Message}</p>");
+                _logTask(ex.Message);
                 return BadRequest(ex);
             }
         }
@@ -59,7 +59,7 @@ namespace ShowTime.Controllers
             }
             catch(Exception ex)
             {
-                _logTask($"<p class=\"console\" style=\"color:red\">{ex.Message}</p>");
+                _logTask(ex.Message);
                 return BadRequest(ex);
             }
         }

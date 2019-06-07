@@ -1,7 +1,7 @@
 .console {
     overflow: hidden;
     white-space: nowrap;
-    animation: typing 0.5s steps(50, start);
+    animation: typing 0.25s steps(50, start);
 }
 
 @keyframes typing {

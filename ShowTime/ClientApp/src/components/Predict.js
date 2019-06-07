@@ -9,7 +9,9 @@ class Predict extends BasicLayout {
         try {
             let response = await fetch('/api/alenka/predict');
             let data = await response.json();
-            this.setState({ data, folder: 'outputs' });
+            if (Array.isArray(data))
+                this.setState({ data, folder: 'outputs' });
+            else throw data;
         } catch (e) {
             if (e) console.error(e.message);
         }

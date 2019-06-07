@@ -9,7 +9,9 @@ class Train extends BasicLayout {
         try {
             let response = await fetch('/api/alenka/train');
             let data = await response.json();
-            this.setState({ data, folder: 'inputs' });
+            if (Array.isArray(data))
+                this.setState({ data, folder: 'inputs' });
+            else throw data;
         } catch (e) {
             if (e) console.error(e.message);
         }

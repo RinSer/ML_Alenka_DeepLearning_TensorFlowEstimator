@@ -5,10 +5,10 @@ import NavMenu from './NavMenu';
 export default props => (
   <Grid fluid>
     <Row>
-      <Col sm={3}>
+      <Col sm={2}>
         <NavMenu />
       </Col>
-      <Col sm={9}>
+      <Col sm={10}>
         {props.children}
       </Col>
     </Row>

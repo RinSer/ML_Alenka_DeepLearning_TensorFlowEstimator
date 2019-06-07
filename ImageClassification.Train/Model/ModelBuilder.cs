@@ -5,6 +5,7 @@ using ImageClassification.ImageData;
 using static ImageClassification.Model.ConsoleHelpers;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace ImageClassification.Model
 {
@@ -96,11 +97,15 @@ namespace ImageClassification.Model
 
             var featurizerModelLocation = inputModelLocation;
 
-            consoleWrite("<p style=\"color:green\" class=\"console\">Считывание модели</p>");
-            consoleWrite($"<p class=\"console\">Файл модели: {featurizerModelLocation}</p>");
-            consoleWrite($"<p class=\"console\">Папка с изображениями: {imagesFolder}</p>");
-            consoleWrite($"<p class=\"console\">Файл с лейблами: {dataLocation}</p>");
-            consoleWrite($"<p class=\"console\">Параметры модели: размер изображений=({ImageNetSettings.imageWidth},{ImageNetSettings.imageHeight}), среднее: {ImageNetSettings.mean}</p>");
+            consoleWrite("Считывание модели");
+            Thread.Sleep(100);
+            consoleWrite($"Файл модели: {featurizerModelLocation}");
+            Thread.Sleep(100);
+            consoleWrite($"Папка с изображениями: {imagesFolder}");
+            Thread.Sleep(100);
+            consoleWrite($"Файл с лейблами: {dataLocation}");
+            Thread.Sleep(100);
+            consoleWrite($"Параметры модели: размер изображений=({ImageNetSettings.imageWidth},{ImageNetSettings.imageHeight}), среднее: {ImageNetSettings.mean}");
 
             var data = mlContext.Data.LoadFromTextFile<ImageNetData>(path: dataLocation, hasHeader: false);
 
@@ -116,7 +121,7 @@ namespace ImageClassification.Model
 
 
             // Train the model
-            consoleWrite("<p class=\"console\" style=\"color:green\">Обучается модель классификатора</p>");
+            consoleWrite("Обучается модель классификатора");
             ITransformer model = pipeline.Fit(data);
 
             // Process the training data through the model
@@ -133,21 +138,21 @@ namespace ImageClassification.Model
                     Probability = pr.Score.Max()
                 }));
             trainingList.ForEach(img => 
-                consoleWrite($"<p class=\"console\">Изображению {img.ImagePath} присвоен лейбл {img.Label} с вероятностью {img.Probability}</p>"));
+                consoleWrite($"Изображению {img.ImagePath} присвоен лейбл {img.Label} с вероятностью {img.Probability}"));
 
             // Get some performance metric on the model using training data            
             var classificationContext = mlContext.MulticlassClassification;
-            consoleWrite("<p class=\"console\">Метрика классификатора</p>");
+            consoleWrite("Метрика классификатора");
             var metrics = classificationContext.Evaluate(trainData, labelColumnName: LabelTokey, predictedLabelColumnName: "PredictedLabel");
-            consoleWrite($"<p class=\"console\">LogLoss: {metrics.LogLoss}</p>");
-            consoleWrite($"<p class=\"console\">PerClassLogLoss: {String.Join(" , ", metrics.PerClassLogLoss.Select(c => c.ToString()))}</p>");
+            consoleWrite($"LogLoss: {metrics.LogLoss}");
+            consoleWrite($"PerClassLogLoss: {String.Join(" , ", metrics.PerClassLogLoss.Select(c => c.ToString()))}");
 
             // Save the model to assets/outputs
-            consoleWrite("<p class=\"console\">Модель сохраняется в файл</p>");
+            consoleWrite("Модель сохраняется в файл");
             ModelHelpers.DeleteAssets(outputModelLocation);
 
             mlContext.Model.Save(model, trainData.Schema, outputModelLocation);
-            consoleWrite($"<p class=\"console\">Модель записана в файл: {outputModelLocation}</p>");
+            consoleWrite($"Модель записана в файл: {outputModelLocation}");
 
             return trainingList;
         }
