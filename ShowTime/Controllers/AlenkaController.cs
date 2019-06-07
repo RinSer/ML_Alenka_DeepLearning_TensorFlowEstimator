@@ -54,7 +54,7 @@ namespace ShowTime.Controllers
             try
             {
                 var modelScorer = new ModelScorer(tagsTsv, outImagesFolder, imageClassifierZip);
-                var result = modelScorer.ClassifyImages4Web();
+                var result = modelScorer.ClassifyImages4Web(_logTask);
                 return Ok(result);
             }
             catch(Exception ex)

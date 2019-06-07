@@ -5,6 +5,7 @@ using System.IO;
 using Microsoft.ML;
 using static ImageClassification.Model.ConsoleHelpers;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ImageClassification.Model
 {
@@ -48,8 +49,11 @@ namespace ImageClassification.Model
                 .ForEach(pr => ConsoleWriteImagePrediction(pr.ImagePath, pr.PredictedLabelValue, pr.Score.Max()));
         }
 
-        public List<ImageWebData> ClassifyImages4Web()
+        public List<ImageWebData> ClassifyImages4Web(Func<string, Task> consoleWrite)
         {
+            consoleWrite("Загрузка модели");
+            consoleWrite($"Файл модели: {modelLocation}");
+
             // Load the model
             ITransformer loadedModel = mlContext.Model.Load(modelLocation, out var modelInputSchema);
 
@@ -58,6 +62,7 @@ namespace ImageClassification.Model
             // Read csv file into List<ImageNetData>
             var imageListToPredict = ImageNetData.ReadFromCsv(dataLocation, imagesFolder).ToList();
 
+            consoleWrite("Идет классификация изображений...");
             return imageListToPredict
                 .Select(td => new { td, pred = predictor.Predict(td) })
                 .Select(pr => new ImageWebData
