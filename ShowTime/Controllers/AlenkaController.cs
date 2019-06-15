@@ -15,12 +15,16 @@ namespace ShowTime.Controllers
     {
         private string assetsPath => GetAbsolutePath(@"../../../assets");
         private readonly IHubContext<ConsoleHub> _hub;
-        private readonly Func<string, Task> _logTask;
+        private readonly Func<string, Task> _logTrainTask;
+        private readonly Func<string, Task> _logPredictTask;
 
         public AlenkaController(IHubContext<ConsoleHub> hub)
         {
             _hub = hub;
-            _logTask = message => _hub.Clients.All.SendAsync("get_log", message);
+            _logTrainTask = message => 
+                _hub.Clients.All.SendAsync("get_train_log", message);
+            _logPredictTask = message =>
+                _hub.Clients.All.SendAsync("get_predict_log", message);
         }
 
         [HttpGet("[action]")]
@@ -34,12 +38,12 @@ namespace ShowTime.Controllers
             try
             {
                 var modelBuilder = new ModelBuilder(tagsTsv, imagesFolder, inceptionPb, imageClassifierZip);
-                var result = modelBuilder.BuildAndReturn(_logTask);
+                var result = modelBuilder.BuildAndReturn(_logTrainTask);
                 return Ok(result);
             }
             catch (Exception ex)
             {
-                _logTask(ex.Message);
+                _logTrainTask(ex.Message);
                 return BadRequest(ex);
             }
         }
@@ -54,12 +58,12 @@ namespace ShowTime.Controllers
             try
             {
                 var modelScorer = new ModelScorer(tagsTsv, outImagesFolder, imageClassifierZip);
-                var result = modelScorer.ClassifyImages4Web(_logTask);
+                var result = modelScorer.ClassifyImages4Web(_logPredictTask);
                 return Ok(result);
             }
             catch(Exception ex)
             {
-                _logTask(ex.Message);
+                _logPredictTask(ex.Message);
                 return BadRequest(ex);
             }
         }

@@ -5,8 +5,21 @@ export default class BasicLayout extends React.Component {
         marginTop: '25px'
     };
 
+    toggleLog = () => {
+        this.setState({ showLog: !this.state.showLog });
+    };
+
+    constructor(props) {
+        super(props);
+        this.state = { showLog: false };
+    }
+
     render() {
 
+        const log = (<div style={this._consoleStyle}>
+            {this.props.logging.map((log, idx) => <p key={log + idx} className="console">{log}</p>)}
+        </div>);
+        
         if (this.state && this.state.data && Array.isArray(this.state.data)) {
             const imgStyle = { float: 'right' };
             const liStyle = {
@@ -25,16 +38,26 @@ export default class BasicLayout extends React.Component {
                 </li>
             );
 
-            return (
-                <div>
-                    <ul>{data}</ul>
-                </div>
-            );
+            if (this.state.showLog) {
+                return (<div>
+                    <button className="btn btn-submit"
+                        onClick={this.toggleLog}>К результатам</button>
+                    {log}
+                </div>);
+            } else {
+                return (<div>
+                    <button className="btn btn-submit"
+                        onClick={this.toggleLog}>К логу</button>
+                    <div>
+                        <ul>{data}</ul>
+                    </div>
+                </div>);
+            }
+
+            
         }
 
-        return (<div style={this._consoleStyle}>
-            {this.props.logging.map((log, idx) => <p key={log + idx} className="console">{log}</p>)}
-        </div>);
+        return log;
         
     }
 

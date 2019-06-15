@@ -40,8 +40,12 @@ export default function configureStore(history, initialState) {
             compose(applyMiddleware(...middleware), ...enhancers)
         );
 
-        connection.on('get_log', logging => {
-            store.dispatch(({ type: CL.log2ConsoleType, logging }));
+        connection.on('get_train_log', logging => {
+            store.dispatch(({ type: CL.log2TrainConsoleType, logging }));
+        });
+
+        connection.on('get_predict_log', logging => {
+            store.dispatch(({ type: CL.log2PredictConsoleType, logging }));
         });
 
         Promise.resolve(connection.start());

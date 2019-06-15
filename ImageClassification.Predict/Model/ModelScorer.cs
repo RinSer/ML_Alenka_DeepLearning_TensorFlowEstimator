@@ -6,6 +6,7 @@ using Microsoft.ML;
 using static ImageClassification.Model.ConsoleHelpers;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace ImageClassification.Model
 {
@@ -52,6 +53,7 @@ namespace ImageClassification.Model
         public List<ImageWebData> ClassifyImages4Web(Func<string, Task> consoleWrite)
         {
             consoleWrite("Загрузка модели");
+            Thread.Sleep(100);
             consoleWrite($"Файл модели: {modelLocation}");
 
             // Load the model

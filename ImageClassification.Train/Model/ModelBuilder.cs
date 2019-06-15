@@ -137,14 +137,18 @@ namespace ImageClassification.Model
                     Label = pr.PredictedLabelValue,
                     Probability = pr.Score.Max()
                 }));
-            trainingList.ForEach(img => 
-                consoleWrite($"Изображению {img.ImagePath} присвоен лейбл {img.Label} с вероятностью {img.Probability}"));
+            trainingList.ForEach(img =>
+            {
+                consoleWrite($"Изображению {img.ImagePath} присвоен лейбл {img.Label} с вероятностью {img.Probability}");
+                Thread.Sleep(100);
+            });
 
             // Get some performance metric on the model using training data            
             var classificationContext = mlContext.MulticlassClassification;
             consoleWrite("Метрика классификатора");
             var metrics = classificationContext.Evaluate(trainData, labelColumnName: LabelTokey, predictedLabelColumnName: "PredictedLabel");
             consoleWrite($"LogLoss: {metrics.LogLoss}");
+            Thread.Sleep(100);
             consoleWrite($"PerClassLogLoss: {String.Join(" , ", metrics.PerClassLogLoss.Select(c => c.ToString()))}");
 
             // Save the model to assets/outputs
