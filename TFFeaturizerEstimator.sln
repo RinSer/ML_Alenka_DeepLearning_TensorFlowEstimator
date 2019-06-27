@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageClassification.Train",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageClassification.Predict", "ImageClassification.Predict\ImageClassification.Predict.csproj", "{313629B6-3560-4633-9775-3A9869EB4692}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShowTime", "ShowTime\ShowTime.csproj", "{9C40123E-02C4-4219-B8B7-5A7DC808ADED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShowTime", "ShowTime\ShowTime.csproj", "{9C40123E-02C4-4219-B8B7-5A7DC808ADED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TranferLearningTF", "TranferLearningTF\TranferLearningTF.csproj", "{8C7024D7-6244-4680-8434-D945D3D232DF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -83,6 +85,26 @@ Global
 		{9C40123E-02C4-4219-B8B7-5A7DC808ADED}.Release|x64.Build.0 = Release|Any CPU
 		{9C40123E-02C4-4219-B8B7-5A7DC808ADED}.Release|x86.ActiveCfg = Release|Any CPU
 		{9C40123E-02C4-4219-B8B7-5A7DC808ADED}.Release|x86.Build.0 = Release|Any CPU
+		{8C7024D7-6244-4680-8434-D945D3D232DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C7024D7-6244-4680-8434-D945D3D232DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C7024D7-6244-4680-8434-D945D3D232DF}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{8C7024D7-6244-4680-8434-D945D3D232DF}.Debug|ARM.Build.0 = Debug|Any CPU
+		{8C7024D7-6244-4680-8434-D945D3D232DF}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{8C7024D7-6244-4680-8434-D945D3D232DF}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{8C7024D7-6244-4680-8434-D945D3D232DF}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{8C7024D7-6244-4680-8434-D945D3D232DF}.Debug|x64.Build.0 = Debug|Any CPU
+		{8C7024D7-6244-4680-8434-D945D3D232DF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8C7024D7-6244-4680-8434-D945D3D232DF}.Debug|x86.Build.0 = Debug|Any CPU
+		{8C7024D7-6244-4680-8434-D945D3D232DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C7024D7-6244-4680-8434-D945D3D232DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C7024D7-6244-4680-8434-D945D3D232DF}.Release|ARM.ActiveCfg = Release|Any CPU
+		{8C7024D7-6244-4680-8434-D945D3D232DF}.Release|ARM.Build.0 = Release|Any CPU
+		{8C7024D7-6244-4680-8434-D945D3D232DF}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{8C7024D7-6244-4680-8434-D945D3D232DF}.Release|ARM64.Build.0 = Release|Any CPU
+		{8C7024D7-6244-4680-8434-D945D3D232DF}.Release|x64.ActiveCfg = Release|Any CPU
+		{8C7024D7-6244-4680-8434-D945D3D232DF}.Release|x64.Build.0 = Release|Any CPU
+		{8C7024D7-6244-4680-8434-D945D3D232DF}.Release|x86.ActiveCfg = Release|Any CPU
+		{8C7024D7-6244-4680-8434-D945D3D232DF}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
