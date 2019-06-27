@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageClassification.Predict
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShowTime", "ShowTime\ShowTime.csproj", "{9C40123E-02C4-4219-B8B7-5A7DC808ADED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TranferLearningTF", "TranferLearningTF\TranferLearningTF.csproj", "{8C7024D7-6244-4680-8434-D945D3D232DF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageClassification.TranferLearningTF", "ImageClassification.TranferLearningTF\ImageClassification.TranferLearningTF.csproj", "{8C7024D7-6244-4680-8434-D945D3D232DF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

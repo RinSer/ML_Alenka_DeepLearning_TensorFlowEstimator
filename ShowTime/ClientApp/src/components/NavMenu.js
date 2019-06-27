@@ -41,6 +41,11 @@ export default props => (
             <Glyphicon glyph='eye-open' /> Классификация<br/>изображений
           </NavItem>
         </LinkContainer>
+        <LinkContainer to={'/transfer'}>
+          <NavItem>
+            <Glyphicon glyph='picture' /> Перенос<br/>обучения
+          </NavItem>
+        </LinkContainer>
       </Nav>
     </Navbar.Collapse>
   </Navbar>

@@ -48,6 +48,10 @@ export default function configureStore(history, initialState) {
             store.dispatch(({ type: CL.log2PredictConsoleType, logging }));
         });
 
+        connection.on('get_transfer_log', logging => {
+            store.dispatch(({ type: CL.log2TransferConsoleType, logging }));
+        });
+
         Promise.resolve(connection.start());
 
         return store;

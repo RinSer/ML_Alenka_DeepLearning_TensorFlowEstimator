@@ -56,6 +56,12 @@ namespace ShowTime
                     Path.Combine(Directory.GetCurrentDirectory(), "assets")),
                 RequestPath = "/assets"
             });
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                    Path.Combine(Directory.GetCurrentDirectory(), "assetss")),
+                RequestPath = "/assetss"
+            });
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
 

@@ -6,6 +6,7 @@ import Counter from './components/Counter';
 import FetchData from './components/FetchData';
 import Train from './components/Train';
 import Predict from './components/Predict';
+import Transfer from './components/Transfer';
 
 export default () => (
   <Layout>
@@ -14,5 +15,6 @@ export default () => (
     <Route path='/fetchdata/:startDateIndex?' component={FetchData} />
     <Route path='/train' component={Train} />
     <Route path='/predict' component={Predict} />
+    <Route path='/transfer' component={Transfer} />
   </Layout>
 );

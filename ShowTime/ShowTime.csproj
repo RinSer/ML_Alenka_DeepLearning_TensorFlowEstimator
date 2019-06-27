@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ImageClassification.Train\ImageClassification.Train.csproj" />
+    <ProjectReference Include="..\ImageClassification.TranferLearningTF\ImageClassification.TranferLearningTF.csproj" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

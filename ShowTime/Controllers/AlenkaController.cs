@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using ImageClassification.ImageData;
 using ImageClassification.Model;
+using ImageClassification.TranferLearningTF;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using ShowTime.Hubs;
@@ -66,6 +69,32 @@ namespace ShowTime.Controllers
                 _logPredictTask(ex.Message);
                 return BadRequest(ex);
             }
+        }
+
+        [HttpGet("[action]")]
+        public IActionResult Transfer()
+        {
+            try
+            {
+                var result = TransferLearner.TrainAndPredict(DisplayResultsToFront);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _hub.Clients.All.SendAsync("get_transfer_log", ex.Message);
+                return BadRequest(ex);
+            }
+        }
+
+        private bool DisplayResultsToFront(IEnumerable<ImagePrediction> imagePredictionData)
+        {
+            foreach (ImagePrediction prediction in imagePredictionData)
+            {
+                Thread.Sleep(100);
+                var message = $"Изображению {Path.GetFileName(prediction.ImagePath)} присвоен лейбл {prediction.PredictedLabelValue} с вероятностью {prediction.Score.Max()}";
+                _hub.Clients.All.SendAsync("get_transfer_log", message);
+            }
+            return true;
         }
 
         private string GetAbsolutePath(string relativePath)
