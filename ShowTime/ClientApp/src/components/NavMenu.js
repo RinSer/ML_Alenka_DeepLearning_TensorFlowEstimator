@@ -16,7 +16,7 @@ export default props => (
       <Nav>
         <LinkContainer to={'/'} exact>
           <NavItem>
-            <Glyphicon glyph='home' /> Home
+            <Glyphicon glyph='home' /> Начало
           </NavItem>
         </LinkContainer>
         {/*

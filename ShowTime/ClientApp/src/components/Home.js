@@ -2,22 +2,28 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 const Home = props => (
-  <div>
-    <h1>Hello, Guta Group!</h1>
-    <p>Welcome to your new single-page application, built with:</p>
-    <ul>
-      <li><a href='https://get.asp.net/'>ASP.NET Core</a> and <a href='https://msdn.microsoft.com/en-us/library/67ef8sbd.aspx'>C#</a> for cross-platform server-side code</li>
-      <li><a href='https://facebook.github.io/react/'>React</a> and <a href='https://redux.js.org/'>Redux</a> for client-side code</li>
-      <li><a href='http://getbootstrap.com/'>Bootstrap</a> for layout and styling</li>
-    </ul>
-    <p>To help you get started, we've also set up:</p>
-    <ul>
-      <li><strong>Client-side navigation</strong>. For example, click <em>Counter</em> then <em>Back</em> to return here.</li>
-      <li><strong>Development server integration</strong>. In development mode, the development server from <code>create-react-app</code> runs in the background automatically, so your client-side resources are dynamically built on demand and the page refreshes when you modify any file.</li>
-      <li><strong>Efficient production builds</strong>. In production mode, development-time features are disabled, and your <code>dotnet publish</code> configuration produces minified, efficiently bundled JavaScript files.</li>
-    </ul>
-    <p>The <code>ClientApp</code> subdirectory is a standard React application based on the <code>create-react-app</code> template. If you open a command prompt in that directory, you can run <code>npm</code> commands such as <code>npm test</code> or <code>npm install</code>.</p>
-  </div>
+    <div>
+        <h1>Как средствами ML.NET натренировать готовую модель Tensorflow классифицировать изображения путём переноса обучения</h1>
+        <p>Этот проект демонстрирует как с помощью библиотеки ML.NET можно создать собственный классификатор изображений, используя предзаданную модель Tensorflow. Первоначальная модель была обучена различать изображения множества объектов. После переноса обучения вновь созданная модель классифицирует изображения согласно заданным категориям. <a href="https://ru.wikipedia.org/wiki/%D0%A2%D0%B5%D0%BE%D1%80%D0%B8%D1%8F_%D1%80%D0%B0%D1%81%D0%BF%D0%BE%D0%B7%D0%BD%D0%B0%D0%B2%D0%B0%D0%BD%D0%B8%D1%8F_%D0%BE%D0%B1%D1%80%D0%B0%D0%B7%D0%BE%D0%B2">Обучение модели классификатора изображений с нуля</a> требует настройки миллионов параметров, тонны данных с лейблами и огромное количество вычислительных ресурсов (сотни часов работы графических процессоров). Не равняясь по эффективность с обучением специализированных моделей с нуля, перенос обучения позволяет существенно сократить процесс тренировки классификатора, снижая количество предзадаваемых изображений с лейблами с миллионов до тысяч, а время обучения модели классификатора становится обозримо быстрым (в рамках часа на машинах без графического процессора).</p>
+        <h2>Что такое перенос обучения?</h2>
+        <p>Что если бы могли использовать модель уже настроенную решать схожую проблему и переобучить все или некоторые слои этой модели, чтобы она решала нашу задачу? Такая техника использования части уже натренированной модели для построения новой модели называется <a href="https://en.wikipedia.org/wiki/Transfer_learning">переносом обучения</a>.</p>
+        <h2>Выбор задачи, подходящей для машинного обучения</h2>
+        <p><a href="https://ru.wikipedia.org/wiki/%D0%93%D0%BB%D1%83%D0%B1%D0%BE%D0%BA%D0%BE%D0%B5_%D0%BE%D0%B1%D1%83%D1%87%D0%B5%D0%BD%D0%B8%D0%B5">Глубокое обучение</a> является подмножеством <a href="https://ru.wikipedia.org/wiki/%D0%9C%D0%B0%D1%88%D0%B8%D0%BD%D0%BD%D0%BE%D0%B5_%D0%BE%D0%B1%D1%83%D1%87%D0%B5%D0%BD%D0%B8%D0%B5">Машинного обучения</a>. Эта технология произвела революцию в сферах компьютерного зрения и распознания речи. Модели глубокого обучения тренируются с помощью наборов <a href="https://en.wikipedia.org/wiki/Labeled_data">данных с лейблами</a> и <a href="https://en.wikipedia.org/wiki/Artificial_neural_network">нейронных сетей</a>, которые содержат множество обучаемых слоёв. Глубокое обучение:</p>
+        <ul>
+            <li>Показывает лучшие результаты для таких задач как компьютерное зрение.</li>
+            <li>Показывает хорошие результаты при наличии значительного количества данных.</li>
+        </ul>
+            <p>Классификация изображений представляет собой распространенную задачу <a href="https://ru.wikipedia.org/wiki/%D0%9C%D0%B0%D1%88%D0%B8%D0%BD%D0%BD%D0%BE%D0%B5_%D0%BE%D0%B1%D1%83%D1%87%D0%B5%D0%BD%D0%B8%D0%B5">Машинного обучения</a>, которая позволяет нам автоматически классифицировать изображения в разные категории, например:</p>
+        <ul>
+            <li>Распознавание человеческого лица на изображении.</li>
+            <li>Различение изображений кошек или собак.</li>
+        </ul>
+        <p>В целом классификаторы изображений можно использовать для определения наличия любых оптических образов на фотографиях, в том числе брендов и продуктов на полках.</p>
+        <p>Перенос обучения достигается путём нескольких стратегий, таких как переобучение всех слоёв или одного предпоследнего слоя. Решение применяет стратегию переобучению единственно предпоследнего слоя. Для этой стратегии используется модель, которая была обучена решать схожую задачу (различать изображения других объектов), последний слой этой готовой нейронной сети переобучается, чтобы решать задачу нужную нам (классифицировать наши изображения). Использование уже готовой модели нейронной сети позволит значительно сократить время и ресурсы для создания нашей собственной.</p> 
+        <p>Данный классификатор использует <a href="https://storage.googleapis.com/download.tensorflow.org/models/inception5h.zip">Inception model</a> - популярную модель классификатора изображений, обучавшуюся на базе данных <a href="https://ru.wikipedia.org/wiki/ImageNet">ImageNet</a>, для которой она научилась различать изображения в тысячи категорий, таких как Зонтик, Свитер или Посудомойка.</p>
+        <p>Модель 'Inception v3' может быть определена как <a href="https://ru.wikipedia.org/wiki/%D0%A1%D0%B2%D1%91%D1%80%D1%82%D0%BE%D1%87%D0%BD%D0%B0%D1%8F_%D0%BD%D0%B5%D0%B9%D1%80%D0%BE%D0%BD%D0%BD%D0%B0%D1%8F_%D1%81%D0%B5%D1%82%D1%8C">Свёрточная нейронная сеть</a>. Её разультаты могут совпадать с чесловеческими и превосходить их в некоторых областях. Сама модель и алгоритм обучения были разработаны группой исследователей на основе оригинальной статьи <a href="https://arxiv.org/abs/1512.00567">Rethinking the Inception Architecture for Computer Vision</a>.</p>
+        <p>Благодаря тому что модель заранее обучена распознавать тысячи различных объектов, она содержит черты изображений, необходимые для распознания объектов. Более низкие слои распознают простые черты, такие как край, более высокие слои распознают сложные черты, такие как форма. Финальный слой такой сети может быть обучен на сравнительно небольшом объеме данных, так как сама модель заранее понимает как лучше классифицировать изображения. Эта модель представляет собой пример <a href="https://docs.microsoft.com/en-us/dotnet/machine-learning/resources/tasks#multiclass-classification">многоклассового классификатора</a>, так как позволяет различать сразу несколько классов изображений.</p>
+    </div>
 );
 
 export default connect()(Home);
