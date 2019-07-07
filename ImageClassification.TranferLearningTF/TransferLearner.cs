@@ -27,10 +27,10 @@ namespace ImageClassification.TranferLearningTF
         private static string LabelTokey = nameof(LabelTokey);
         private static string PredictedLabelValue = nameof(PredictedLabelValue);
 
-        private static Func<IEnumerable<ImagePrediction>, bool> DisplayResults;
+        private static Func<IEnumerable<ImagePrediction>, string, bool> DisplayResults;
         private static List<ImageWebData> _showResults;
 
-        public static List<ImageWebData> TrainAndPredict(Func<IEnumerable<ImagePrediction>, bool> displayResults)
+        public static List<ImageWebData> TrainAndPredict(Func<IEnumerable<ImagePrediction>, string, bool> displayResults)
         {
             _showResults = new List<ImageWebData>();
 
@@ -68,7 +68,7 @@ namespace ImageClassification.TranferLearningTF
             var ImageDatum = mlContext.Data.CreateEnumerable<ImageDatum>(data, false, true);
             var imagePredictionData = mlContext.Data.CreateEnumerable<ImagePrediction>(predictions, false, true);
 
-            DisplayResults(imagePredictionData);
+            DisplayResults(imagePredictionData, null);
 
             _showResults.AddRange(imagePredictionData.Select(ipd => new ImageWebData
             {
@@ -80,9 +80,9 @@ namespace ImageClassification.TranferLearningTF
             var multiclassContext = mlContext.MulticlassClassification;
             var metrics = multiclassContext.Evaluate(predictions, labelColumnName: LabelTokey, predictedLabelColumnName: "PredictedLabel");
 
-            Console.WriteLine($"LogLoss is: {metrics.LogLoss}");
-            Console.WriteLine($"PerClassLogLoss is: {String.Join(" , ", metrics.PerClassLogLoss.Select(c => c.ToString()))}");
-
+            DisplayResults(null, $"LogLoss is: {metrics.LogLoss}");
+            DisplayResults(null, $"PerClassLogLoss is: {String.Join(" , ", metrics.PerClassLogLoss.Select(c => c.ToString()))}");
+            
             return model;
         }
 
@@ -94,7 +94,7 @@ namespace ImageClassification.TranferLearningTF
             var predictions = model.Transform(ImageDatumView);
             var imagePredictionData = mlContext.Data.CreateEnumerable<ImagePrediction>(predictions, false, true);
 
-            DisplayResults(imagePredictionData);
+            DisplayResults(imagePredictionData, null);
 
             _showResults.AddRange(imagePredictionData.Select(ipd => new ImageWebData
             {
@@ -114,7 +114,7 @@ namespace ImageClassification.TranferLearningTF
             var predictor = mlContext.Model.CreatePredictionEngine<ImageDatum, ImagePrediction>(model);
             var prediction = predictor.Predict(ImageDatum);
 
-            DisplayResults(new List<ImagePrediction> { prediction });
+            DisplayResults(new List<ImagePrediction> { prediction }, null);
 
             _showResults.Add(new ImageWebData
             {

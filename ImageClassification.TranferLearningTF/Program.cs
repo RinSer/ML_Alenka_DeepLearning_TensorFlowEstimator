@@ -13,12 +13,18 @@ namespace ImageClassification.TranferLearningTF
             TransferLearner.TrainAndPredict(DisplayResultsToConcole);
         }
 
-        private static bool DisplayResultsToConcole(IEnumerable<ImagePrediction> imagePredictionData)
+        private static bool DisplayResultsToConcole(IEnumerable<ImagePrediction> imagePredictionData, string message = null)
         {
-            foreach (ImagePrediction prediction in imagePredictionData)
+            if (imagePredictionData != null)
             {
-                Console.WriteLine($"Image: {Path.GetFileName(prediction.ImagePath)} predicted as: {prediction.PredictedLabelValue} with score: {prediction.Score.Max()} ");
+                foreach (ImagePrediction prediction in imagePredictionData)
+                {
+                    Console.WriteLine($"Image: {Path.GetFileName(prediction.ImagePath)} predicted as: {prediction.PredictedLabelValue} with score: {prediction.Score.Max()} ");
+                }
             }
+
+            if (!string.IsNullOrEmpty(message)) Console.WriteLine(message);
+
             return true;
         }
     }

@@ -20,6 +20,7 @@ namespace ShowTime.Controllers
         private readonly IHubContext<ConsoleHub> _hub;
         private readonly Func<string, Task> _logTrainTask;
         private readonly Func<string, Task> _logPredictTask;
+        private readonly Func<string, Task> _logTransferTask;
 
         public AlenkaController(IHubContext<ConsoleHub> hub)
         {
@@ -28,6 +29,8 @@ namespace ShowTime.Controllers
                 _hub.Clients.All.SendAsync("get_train_log", message);
             _logPredictTask = message =>
                 _hub.Clients.All.SendAsync("get_predict_log", message);
+            _logTransferTask = message =>
+                _hub.Clients.All.SendAsync("get_transfer_log", message);
         }
 
         [HttpGet("[action]")]
@@ -81,19 +84,30 @@ namespace ShowTime.Controllers
             }
             catch (Exception ex)
             {
-                _hub.Clients.All.SendAsync("get_transfer_log", ex.Message);
+                _logTransferTask(ex.Message);
                 return BadRequest(ex);
             }
         }
 
-        private bool DisplayResultsToFront(IEnumerable<ImagePrediction> imagePredictionData)
+        private bool DisplayResultsToFront(IEnumerable<ImagePrediction> imagePredictionData, string message)
         {
-            foreach (ImagePrediction prediction in imagePredictionData)
+            if (imagePredictionData != null)
+            {
+                foreach (ImagePrediction prediction in imagePredictionData)
+                {
+                    Thread.Sleep(100);
+                    _logTransferTask(
+                        $"Изображению {Path.GetFileName(prediction.ImagePath)} присвоен лейбл {prediction.PredictedLabelValue} с вероятностью {prediction.Score.Max()}"
+                    );
+                }
+            }
+
+            if (!string.IsNullOrEmpty(message))
             {
                 Thread.Sleep(100);
-                var message = $"Изображению {Path.GetFileName(prediction.ImagePath)} присвоен лейбл {prediction.PredictedLabelValue} с вероятностью {prediction.Score.Max()}";
-                _hub.Clients.All.SendAsync("get_transfer_log", message);
+                _logTransferTask(message);
             }
+
             return true;
         }
 
